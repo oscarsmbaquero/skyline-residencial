@@ -1,0 +1,101 @@
+<!-- Floating button -->
+<button class="chat-fab" (click)="toggleChat()" [class.open]="isOpen" aria-label="Abrir asistente virtual">
+  <svg class="icon-chat" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+  </svg>
+  <svg class="icon-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+    <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+  </svg>
+  <span class="fab-label">Asistente VPO</span>
+</button>
+
+<!-- Chat panel -->
+<div class="chat-panel" [class.visible]="isOpen">
+  <!-- Header -->
+  <div class="chat-header">
+    <div class="chat-header-info">
+      <div class="chat-avatar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+        </svg>
+      </div>
+      <div>
+        <div class="chat-name">Asistente VPO</div>
+        <div class="chat-status">
+          <span class="status-dot"></span>
+          Skyline Residencial
+        </div>
+      </div>
+    </div>
+    <button class="chat-close-btn" (click)="closeChat()" aria-label="Cerrar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+        <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+      </svg>
+    </button>
+  </div>
+
+  <!-- Messages -->
+  <div class="chat-messages">
+    @for (msg of messages; track $index) {
+      <div class="msg" [class.msg-user]="msg.role === 'user'" [class.msg-bot]="msg.role === 'assistant'">
+        @if (msg.role === 'assistant') {
+          <div class="msg-avatar">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+            </svg>
+          </div>
+        }
+        <div class="msg-bubble">{{ msg.content }}</div>
+      </div>
+    }
+
+    <!-- Loading dots -->
+    @if (loading) {
+      <div class="msg msg-bot">
+        <div class="msg-avatar">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+          </svg>
+        </div>
+        <div class="msg-bubble typing-indicator">
+          <span></span><span></span><span></span>
+        </div>
+      </div>
+    }
+
+    <div #messagesEnd></div>
+  </div>
+
+  <!-- Quick questions (only when no user messages yet) -->
+  @if (messages.length === 1) {
+    <div class="quick-questions">
+      <p class="quick-label">Preguntas frecuentes</p>
+      <div class="quick-chips">
+        @for (q of quickQuestions; track q) {
+          <button class="quick-chip" (click)="askQuick(q)">{{ q }}</button>
+        }
+      </div>
+    </div>
+  }
+
+  <!-- Input -->
+  <div class="chat-input-row">
+    <textarea
+      class="chat-input"
+      [(ngModel)]="input"
+      (keydown)="onKeyDown($event)"
+      [disabled]="loading"
+      placeholder="Escribe tu pregunta…"
+      rows="1"
+      aria-label="Mensaje"></textarea>
+    <button
+      class="chat-send"
+      (click)="send()"
+      [disabled]="!input.trim() || loading"
+      aria-label="Enviar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>
+      </svg>
+    </button>
+  </div>
+</div>

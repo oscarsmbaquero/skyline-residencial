@@ -1,0 +1,92 @@
+<div class="admin-wrap">
+
+  <!-- Header -->
+  <header class="admin-header">
+    <div class="header-brand">
+      <span class="brand-name">SKYLINE</span>
+      <span class="brand-sub">Panel de administración</span>
+    </div>
+    <button class="logout-btn" (click)="logout()">Cerrar sesión</button>
+  </header>
+
+  <!-- Resumen -->
+  <section class="summary-bar">
+    <div class="summary-chip avail">
+      <span class="chip-num">{{ summary.avail }}</span>
+      <span class="chip-label">Disponibles</span>
+    </div>
+    <div class="summary-chip reserv">
+      <span class="chip-num">{{ summary.reserv }}</span>
+      <span class="chip-label">Reservadas</span>
+    </div>
+    <div class="summary-chip sold">
+      <span class="chip-num">{{ summary.sold }}</span>
+      <span class="chip-label">Vendidas</span>
+    </div>
+    <div class="summary-chip total">
+      <span class="chip-num">{{ summary.total }}</span>
+      <span class="chip-label">Total</span>
+    </div>
+  </section>
+
+  <!-- Tabla -->
+  @if (loading) {
+    <div class="loading">Cargando estados…</div>
+  } @else {
+    <div class="table-wrap">
+      <table class="pisos-table">
+        <thead>
+          <tr>
+            <th>Ficha</th>
+            <th>Portal</th>
+            <th>Planta</th>
+            <th>Pos.</th>
+            <th>Dorms.</th>
+            <th>Estado actual</th>
+            <th>Cambiar estado</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (v of viviendas; track v.ficha) {
+            <tr [class]="'row-' + v.statusKey">
+              <td class="ficha-cell">#{{ v.ficha }}</td>
+              <td>Portal {{ v.portal }}</td>
+              <td>{{ v.planta }}</td>
+              <td>{{ v.posicion }}</td>
+              <td>{{ v.dorms }}D</td>
+              <td>
+                <span class="status-badge" [class]="'badge-' + v.statusKey">
+                  {{ v.statusLabel }}
+                </span>
+              </td>
+              <td class="actions-cell">
+                <button
+                  class="action-btn avail-btn"
+                  [class.active]="v.status === 0"
+                  [disabled]="v.status === 0 || isSaving(v.ficha)"
+                  (click)="setStatus(v.ficha, 0)">
+                  Disponible
+                </button>
+                <button
+                  class="action-btn reserv-btn"
+                  [class.active]="v.status === 1"
+                  [disabled]="v.status === 1 || isSaving(v.ficha)"
+                  (click)="setStatus(v.ficha, 1)">
+                  Reservada
+                </button>
+                <button
+                  class="action-btn sold-btn"
+                  [class.active]="v.status === 2"
+                  [disabled]="v.status === 2 || isSaving(v.ficha)"
+                  (click)="setStatus(v.ficha, 2)">
+                  Vendida
+                </button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+
+</div>

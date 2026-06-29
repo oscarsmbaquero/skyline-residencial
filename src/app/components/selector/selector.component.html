@@ -1,0 +1,98 @@
+<section class="selector" id="viviendas">
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <span class="eyebrow">Viviendas</span>
+        <h2>Elige tu <em>hogar</em></h2>
+      </div>
+      <p class="head-right">Selecciona un bloque y una planta para explorar las viviendas disponibles. Haz clic en cualquier piso para ver todos sus detalles.</p>
+    </div>
+
+    <!-- Block tabs -->
+    <div class="selector-tabs">
+      @for (block of blocks; track block) {
+        <button
+          class="tab"
+          [class.active]="activeBlock === block"
+          (click)="setBlock(block)">
+          Bloque {{ block }}
+          <span class="count">{{ availCountForBlock(block) }} disp.</span>
+        </button>
+      }
+    </div>
+
+    <!-- Main grid -->
+    <div class="selector-grid">
+      <!-- Left: Facade -->
+      <div class="facade-card">
+        <div class="card-head">
+          <h3>Bloque {{ activeBlock }}</h3>
+          <span class="sub">Haz clic para seleccionar</span>
+        </div>
+        <app-facade
+          [block]="activeBlock"
+          [selectedId]="selectedId"
+          (flatSelected)="onFlatSelected($event)"
+          (floorHovered)="onFloorHovered($event)">
+        </app-facade>
+      </div>
+
+      <!-- Right: Floor plan + detail -->
+      <div style="display:flex;flex-direction:column;gap:20px;">
+        <div class="floorplan-card">
+          <div class="card-head">
+            <h3>Planta {{ floorLabel(activeFloor) }}</h3>
+            <span class="sub">Vista superior</span>
+          </div>
+          <div class="floor-strip">
+            @for (floor of floors; track floor) {
+              <button
+                class="floor-pill"
+                [class.active]="activeFloor === floor"
+                (click)="setFloor(floor)">
+                {{ floorLabel(floor) }}
+              </button>
+            }
+          </div>
+          <app-floor-plan
+            [block]="activeBlock"
+            [floor]="activeFloor"
+            [selectedId]="selectedId"
+            (flatSelected)="onFlatSelected($event)">
+          </app-floor-plan>
+        </div>
+
+        <app-flat-detail [flat]="selectedFlat"></app-flat-detail>
+      </div>
+    </div>
+
+    <!-- Summary bar -->
+    <dl class="selector-summary">
+      <div>
+        <dt>Total viviendas</dt>
+        <dd>{{ summary.total }}</dd>
+      </div>
+      <div>
+        <dt>Disponibles</dt>
+        <dd>
+          <span class="stat-dot" style="background:#5B8C6F"></span>
+          {{ summary.avail }}
+        </dd>
+      </div>
+      <div>
+        <dt>Reservadas</dt>
+        <dd>
+          <span class="stat-dot" style="background:#C7A26A"></span>
+          {{ summary.reserv }}
+        </dd>
+      </div>
+      <div>
+        <dt>Vendidas</dt>
+        <dd>
+          <span class="stat-dot" style="background:#A8554F"></span>
+          {{ summary.sold }}
+        </dd>
+      </div>
+    </dl>
+  </div>
+</section>

@@ -1,0 +1,262 @@
+<section class="viv-selector">
+  <div class="wrap">
+
+    <!-- ── Cabecera ──────────────────────────────────────────────────────── -->
+    <div class="section-head">
+      <div>
+        <span class="eyebrow">Selector de Viviendas</span>
+        <h2>54 viviendas.<br/><em>Encuentra la tuya.</em></h2>
+      </div>
+      <p class="head-right">
+        Edificio de 54 Viviendas VPO en C/ Hermandad de Jesús de la Pasión, S/N,
+        Plasencia. 3 portales · 5 plantas · Todas con garaje y trastero incluidos.
+      </p>
+    </div>
+
+    <!-- ── Filtros ────────────────────────────────────────────────────────── -->
+    <div class="viv-filters">
+      <!-- Portal -->
+      <div class="filter-block">
+        <div class="filter-label">Portal</div>
+        <div class="selector-tabs">
+          <button class="tab" [class.active]="activePortal === 0" (click)="setPortal(0)">
+            Todos
+          </button>
+          @for (p of portales; track p) {
+            <button class="tab" [class.active]="activePortal === p" (click)="setPortal(p)">
+              Portal {{ p }}
+              <span class="count">{{ svc.countAvail(p) }}/{{ svc.totalByPortal(p) }}</span>
+            </button>
+          }
+        </div>
+      </div>
+
+      <!-- Planta -->
+      <div class="filter-block">
+        <div class="filter-label">Planta</div>
+        <div class="pill-row">
+          <button class="floor-pill" [class.active]="activePlanta === ''" (click)="setPlanta('')">
+            Todas
+          </button>
+          @for (pl of plantas; track pl) {
+            <button class="floor-pill" [class.active]="activePlanta === pl" (click)="setPlanta(pl)">
+              {{ plantaShort[pl] }}
+            </button>
+          }
+        </div>
+      </div>
+
+      <!-- Dormitorios -->
+      <div class="filter-block">
+        <div class="filter-label">Dormitorios</div>
+        <div class="pill-row">
+          <button class="floor-pill" [class.active]="activeDorms === 0" (click)="setDorms(0)">Todos</button>
+          <button class="floor-pill" [class.active]="activeDorms === 2" (click)="setDorms(2)">2 dorm.</button>
+          <button class="floor-pill" [class.active]="activeDorms === 3" (click)="setDorms(3)">3 dorm.</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Grid + Panel de detalle ────────────────────────────────────────── -->
+    <div class="viv-main">
+
+      <!-- Columna izquierda: tarjetas agrupadas -->
+      <div class="viv-grid-col">
+        @if (grupos.length === 0) {
+          <div class="viv-empty">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" opacity=".4">
+              <rect x="4" y="3" width="16" height="18"/><path d="M8 7h2M14 7h2M8 11h2M14 11h2M8 15h2M14 15h2"/>
+            </svg>
+            <p>No hay viviendas que coincidan con los filtros seleccionados.</p>
+          </div>
+        }
+
+        @for (grupo of grupos; track grupo.key) {
+          <div class="viv-grupo">
+            <div class="grupo-head">
+              <span class="grupo-portal">{{ grupo.portalLabel }}</span>
+              <span class="grupo-sep">·</span>
+              <span class="grupo-planta">{{ grupo.plantaLabel }}</span>
+              <span class="grupo-count">{{ grupo.viviendas.length }} vivienda{{ grupo.viviendas.length !== 1 ? 's' : '' }}</span>
+            </div>
+            <div class="viv-cards">
+              @for (v of grupo.viviendas; track v.ficha) {
+                <button
+                  class="viv-card"
+                  [class.selected]="selectedFicha === v.ficha"
+                  [attr.data-status]="v.statusKey"
+                  (click)="select(v.ficha)">
+                  <div class="card-ficha">Ficha {{ v.ficha }}</div>
+                  <div class="card-pos">Posición {{ v.posicion }}</div>
+                  <div class="card-dorms">{{ v.dorms }} dorm. · {{ v.banos }} baños</div>
+                  <div class="card-badge" [attr.data-status]="v.statusKey">{{ v.statusLabel }}</div>
+                </button>
+              }
+            </div>
+          </div>
+        }
+      </div>
+
+      <!-- Columna derecha: panel de detalle -->
+      <div class="viv-detail-col">
+        @if (selected) {
+          <div class="flat-detail-card">
+
+            <!-- Barra de estado -->
+            <div class="detail-status" [class]="selected.statusKey">
+              <span>
+                <span class="badge-dot"></span>
+                {{ selected.statusLabel }}
+              </span>
+              <span>{{ statusText(selected.status) }}</span>
+            </div>
+
+            <!-- Cuerpo -->
+            <div class="detail-body">
+              <div class="detail-title">
+                <h4>Ficha {{ selected.ficha }}</h4>
+                <span class="ref">Portal {{ selected.portal }} · Pos. {{ selected.posicion }}</span>
+              </div>
+              <div class="detail-sub">
+                {{ plantaLabel[selected.planta] }} · C/ Hermandad de Jesús de la Pasión, S/N · Plasencia
+              </div>
+
+              <!-- Precio / VPO -->
+              <div class="detail-price">
+                <span class="num">Precio a consultar</span>
+                <span class="lab">Régimen VPO</span>
+                <span class="vpo-tag">VPO</span>
+              </div>
+
+              <!-- Specs -->
+              <div class="detail-specs">
+                <!-- Dormitorios -->
+                <div class="spec">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M3 18v-6a3 3 0 0 1 3-3h12a3 3 0 0 1 3 3v6"/><path d="M3 18h18"/><path d="M7 9V7a2 2 0 0 1 2-2h2v4"/>
+                  </svg>
+                  <div><b>{{ selected.dorms }} dormitorios</b><span>Dormitorios</span></div>
+                </div>
+                <!-- Baños -->
+                <div class="spec">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M4 12V6a2 2 0 0 1 4 0"/><path d="M3 12h18"/><path d="M5 12v4a3 3 0 0 0 3 3h8a3 3 0 0 0 3-3v-4"/><path d="M8 21l-1 1M16 21l1 1"/>
+                  </svg>
+                  <div><b>{{ selected.banos }} baños</b><span>Baños</span></div>
+                </div>
+                <!-- Terraza -->
+                @if (selected.terraza) {
+                  <div class="spec">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                      <circle cx="12" cy="12" r="4"/>
+                      <path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>
+                    </svg>
+                    <div><b>Terraza</b><span>Espacio exterior</span></div>
+                  </div>
+                }
+                <!-- Patio (solo PB) -->
+                @if (selected.patio) {
+                  <div class="spec">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                      <path d="M12 2c3 3 5 5 5 8a5 5 0 0 1-10 0c0-3 2-5 5-8z"/><path d="M12 14v8"/>
+                    </svg>
+                    <div><b>Patio</b><span>Exterior e Interior</span></div>
+                  </div>
+                }
+                <!-- Garaje -->
+                <div class="spec">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M3 13l2-5a2 2 0 0 1 2-1h10a2 2 0 0 1 2 1l2 5"/><path d="M3 13h18v5H3z"/>
+                    <circle cx="7" cy="18" r="1.5"/><circle cx="17" cy="18" r="1.5"/>
+                  </svg>
+                  <div><b>Garaje</b><span>Incluido</span></div>
+                </div>
+                <!-- Trastero -->
+                <div class="spec">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M3 7l9-4 9 4-9 4-9-4z"/><path d="M3 7v10l9 4 9-4V7"/><path d="M12 11v10"/>
+                  </svg>
+                  <div><b>Trastero</b><span>Incluido</span></div>
+                </div>
+              </div>
+
+              <!-- Estancias -->
+              <div class="estancias-section">
+                <div class="estancias-label">Estancias</div>
+                <div class="estancias-tags">
+                  @for (e of selected.estancias; track e) {
+                    <span class="estancia-tag">{{ e }}</span>
+                  }
+                </div>
+              </div>
+
+              <!-- Acciones -->
+              <div class="detail-actions">
+                @if (selected.status === 0) {
+                  <a routerLink="/contacto" class="cta accent" style="flex:1">
+                    Reservar esta vivienda
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M5 12h14M13 5l7 7-7 7"/>
+                    </svg>
+                  </a>
+                  <a routerLink="/contacto" class="cta ghost">Solicitar visita</a>
+                } @else if (selected.status === 1) {
+                  <a routerLink="/contacto" class="cta ghost" style="flex:1;justify-content:center">
+                    Avisarme si queda disponible
+                  </a>
+                } @else {
+                  <a routerLink="/pisos" class="cta ghost" style="flex:1;justify-content:center">
+                    Ver otras viviendas
+                  </a>
+                }
+              </div>
+            </div>
+          </div>
+
+        } @else {
+          <!-- Empty state -->
+          <div class="flat-detail-card">
+            <div class="detail-empty">
+              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2">
+                <rect x="4" y="3" width="16" height="18"/>
+                <path d="M8 7h2M14 7h2M8 11h2M14 11h2M8 15h2M14 15h2"/>
+              </svg>
+              <h4 style="font-family:var(--font-display);font-size:24px;font-weight:400;margin:0 0 8px">
+                Selecciona una vivienda
+              </h4>
+              <p style="margin:0;font-size:14px">
+                Haz clic en cualquier tarjeta para ver los detalles completos, las estancias y las opciones de reserva.
+              </p>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+
+    <!-- ── Barra de resumen ───────────────────────────────────────────────── -->
+    <dl class="selector-summary">
+      <div><dt>Total viviendas</dt><dd>{{ summary.total }}</dd></div>
+      <div>
+        <dt><span class="stat-dot" style="background:var(--avail)"></span>Disponibles</dt>
+        <dd>{{ summary.avail }}</dd>
+      </div>
+      <div>
+        <dt><span class="stat-dot" style="background:var(--reserv)"></span>Reservadas</dt>
+        <dd>{{ summary.reserv }}</dd>
+      </div>
+      <div>
+        <dt><span class="stat-dot" style="background:var(--sold)"></span>Vendidas</dt>
+        <dd>{{ summary.sold }}</dd>
+      </div>
+      <div style="margin-left:auto">
+        <a routerLink="/contacto" class="cta accent">
+          Reservar ahora
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M5 12h14M13 5l7 7-7 7"/>
+          </svg>
+        </a>
+      </div>
+    </dl>
+
+  </div>
+</section>

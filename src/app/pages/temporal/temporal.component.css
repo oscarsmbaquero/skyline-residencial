@@ -1,0 +1,102 @@
+.construction {
+  padding: 8rem 0;
+}
+
+.construction-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+  margin-top: 3rem;
+}
+
+.construction-card,
+.construction-illustration {
+  background: #fff;
+  border-radius: 28px;
+  padding: 3rem;
+  box-shadow: 0 20px 40px rgba(0,0,0,.08);
+}
+
+.construction-card h3,
+.construction-message h3 {
+  font-size: 1.8rem;
+  margin-bottom: 2rem;
+  color: var(--primary-dark);
+}
+
+.construction-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.construction-list li {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  color: #5c6770;
+  align-items: center;
+}
+
+.construction-list svg {
+  color: var(--accent-coral);
+  flex-shrink: 0;
+}
+
+.construction-contact {
+  margin-top: 2.5rem;
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.btn-primary,
+.btn-secondary {
+  padding: .9rem 1.8rem;
+  border-radius: 999px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: .3s;
+}
+
+.btn-primary {
+  background: var(--primary-dark);
+  color: white;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+}
+
+.btn-secondary {
+  border: 1px solid #dcdcdc;
+  color: var(--primary-dark);
+}
+
+.construction-illustration {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+}
+
+.construction-logo {
+  width: 125px;
+  margin: 0 auto 2rem;
+}
+
+.construction-message p {
+  color: #66717b;
+  line-height: 1.7;
+}
+
+@media (max-width: 992px) {
+  .construction-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .construction-card,
+  .construction-illustration {
+    padding: 2rem;
+  }
+}

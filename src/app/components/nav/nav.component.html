@@ -1,0 +1,59 @@
+<header class="nav" [class.invert]="isHome" [class.scrolled]="scrolled">
+  <div class="wrap">
+    <div class="row">
+      <a routerLink="/" class="brand" (click)="onLogoClick()">
+        <div class="brand-mark">
+          <img src="assets/logo-skyline.png" alt="Skyline logo" width="38" height="38">
+        </div>
+        <div class="brand-text">
+          <div class="b1" style="color: black;">SKYLINE RESIDENCIAL</div>
+          <div class="b2" style="color: black;">CREANDO HOGARES</div>
+        </div>
+      </a>
+
+      <!-- <nav class="nav-links">
+        <a routerLink="/promocion" routerLinkActive="active">La promoción</a>
+        <a routerLink="/pisos"     routerLinkActive="active">Pisos disponibles</a>
+        <a routerLink="/calidades" routerLinkActive="active">Calidades</a>
+        <a routerLink="/galeria"   routerLinkActive="active">Galería</a>
+        <a routerLink="/proceso"   routerLinkActive="active">Proceso</a>
+        <a routerLink="/faq"       routerLinkActive="active">VPO</a>
+      </nav> -->
+
+      <!-- <a routerLink="/contacto" class="cta accent nav-cta-desktop">
+        Reservar visita
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M5 12h14M13 5l7 7-7 7"/>
+        </svg>
+      </a> -->
+
+      <!-- Hamburger button (mobile only) -->
+      <!-- <button class="menu-btn" (click)="toggleMenu()" [class.open]="menuOpen" aria-label="Abrir menú">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button> -->
+    </div>
+  </div>
+</header>
+
+<!-- Mobile drawer overlay -->
+<!-- <div class="mobile-overlay" [class.visible]="menuOpen" (click)="closeMenu()"></div> -->
+
+<!-- Mobile drawer -->
+<!-- <aside class="mobile-drawer" [class.open]="menuOpen">
+  <nav class="mobile-nav">
+    <a routerLink="/promocion" routerLinkActive="active" (click)="closeMenu()">La promoción</a>
+    <a routerLink="/pisos"     routerLinkActive="active" (click)="closeMenu()">Pisos disponibles</a>
+    <a routerLink="/calidades" routerLinkActive="active" (click)="closeMenu()">Calidades</a>
+    <a routerLink="/galeria"   routerLinkActive="active" (click)="closeMenu()">Galería</a>
+    <a routerLink="/proceso"   routerLinkActive="active" (click)="closeMenu()">Proceso</a>
+    <a routerLink="/faq"       routerLinkActive="active" (click)="closeMenu()">VPO</a>
+  </nav>
+  <a routerLink="/contacto" class="cta accent mobile-drawer-cta" (click)="closeMenu()">
+    Reservar visita
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M5 12h14M13 5l7 7-7 7"/>
+    </svg>
+  </a>
+</aside> -->

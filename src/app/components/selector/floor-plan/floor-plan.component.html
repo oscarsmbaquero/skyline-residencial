@@ -1,0 +1,81 @@
+<div class="floorplan-wrap">
+  <svg viewBox="0 0 460 380" class="floorplan-svg" role="img" [attr.aria-label]="'Planta ' + floor + ' Bloque ' + block">
+    <defs>
+      <pattern id="hatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+        <line x1="0" y1="0" x2="0" y2="6" stroke="rgba(0,0,0,0.06)" stroke-width="1"/>
+      </pattern>
+    </defs>
+
+    <!-- Background -->
+    <rect width="460" height="380" fill="#F5F0E6"/>
+
+    <!-- Outer building outline -->
+    <rect x="10" y="10" width="440" height="360" rx="6" fill="#E8E2D4" stroke="#C8BFB0" stroke-width="1.5"/>
+
+    <!-- Hallway / common area (hatched) -->
+    <rect x="194" y="148" width="72" height="64" fill="url(#hatch)" stroke="#C8BFB0" stroke-width="1"/>
+    <text x="230" y="176" text-anchor="middle" dominant-baseline="middle" fill="#9A8E7E" font-size="8" font-family="sans-serif" letter-spacing="1">NÚCLEO</text>
+    <text x="230" y="187" text-anchor="middle" dominant-baseline="middle" fill="#9A8E7E" font-size="8" font-family="sans-serif" letter-spacing="1">COMÚN</text>
+
+    <!-- Apartment rectangles -->
+    @for (rect of rects; track rect.id) {
+      <g
+        class="fp-flat"
+        [class.selected]="rect.id === selectedId"
+        (click)="onRectClick(rect.id)"
+        role="button"
+        [attr.aria-label]="rect.flat.name + ' - ' + rect.flat.statusLabel"
+        tabindex="0"
+        (keydown.enter)="onRectClick(rect.id)">
+        <rect
+          [attr.x]="rect.x"
+          [attr.y]="rect.y"
+          [attr.width]="rect.w"
+          [attr.height]="rect.h"
+          rx="4"
+          [attr.fill]="rect.fill"
+          [attr.stroke]="rect.id === selectedId ? '#0E1C25' : '#C8BFB0'"
+          [attr.stroke-width]="rect.id === selectedId ? 2.5 : 1.5"/>
+        <!-- Letter label -->
+        <text
+          [attr.x]="rect.labelX"
+          [attr.y]="rect.labelY - 10"
+          text-anchor="middle"
+          dominant-baseline="middle"
+          [attr.fill]="rect.textFill"
+          font-size="28"
+          font-weight="700"
+          font-family="sans-serif"
+          opacity="0.35">{{ rect.flat.letter }}</text>
+        <!-- Status label -->
+        <text
+          [attr.x]="rect.labelX"
+          [attr.y]="rect.labelY + 14"
+          text-anchor="middle"
+          dominant-baseline="middle"
+          [attr.fill]="rect.textFill"
+          font-size="10"
+          font-weight="600"
+          font-family="sans-serif">{{ rect.flat.statusLabel }}</text>
+        <!-- Dorms info -->
+        <text
+          [attr.x]="rect.labelX"
+          [attr.y]="rect.labelY + 28"
+          text-anchor="middle"
+          dominant-baseline="middle"
+          [attr.fill]="rect.textFill"
+          font-size="9"
+          font-family="sans-serif"
+          opacity="0.7">{{ rect.flat.dorms }} dorm · {{ rect.flat.util }}m²</text>
+      </g>
+    }
+
+    <!-- Compass rose -->
+    <g transform="translate(424, 344)">
+      <circle cx="0" cy="0" r="14" fill="white" stroke="#C8BFB0" stroke-width="1"/>
+      <path d="M0,-10 L3,-3 L0,0 L-3,-3 Z" fill="#2F4A5C"/>
+      <path d="M0,10 L3,3 L0,0 L-3,3 Z" fill="#C8BFB0"/>
+      <text x="0" y="-14" text-anchor="middle" dominant-baseline="auto" fill="#2F4A5C" font-size="7" font-weight="700" font-family="sans-serif">N</text>
+    </g>
+  </svg>
+</div>

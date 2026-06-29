@@ -1,0 +1,148 @@
+<section class="contact" id="contacto">
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <span class="eyebrow">Contacto</span>
+        <h2>Hablemos de tu <em>futuro hogar</em></h2>
+      </div>
+      <p class="head-right" style="color:rgba(251,249,244,.7);">Sin compromiso. Nuestros asesores resolverán todas tus dudas sobre disponibilidad, financiación y proceso de compra.</p>
+    </div>
+
+    <div class="contact-grid">
+      <!-- Form -->
+      <div>
+        @if (!submitted) {
+          <form class="contact-form" #contactForm="ngForm" (ngSubmit)="onSubmit()">
+            <div class="row">
+              <div class="field">
+                <label for="name">Nombre completo</label>
+                <input
+                  id="name"
+                  name="name"
+                  type="text"
+                  [(ngModel)]="form.name"
+                  required
+                  placeholder="Tu nombre">
+              </div>
+              <div class="field">
+                <label for="phone">Teléfono</label>
+                <input
+                  id="phone"
+                  name="phone"
+                  type="tel"
+                  [(ngModel)]="form.phone"
+                  placeholder="6XX XXX XXX">
+              </div>
+            </div>
+            <div class="field">
+              <label for="email">Correo electrónico</label>
+              <input
+                id="email"
+                name="email"
+                type="email"
+                [(ngModel)]="form.email"
+                required
+                placeholder="tu@email.com">
+            </div>
+            <div class="field">
+              <label for="interest">Me interesa</label>
+              <select id="interest" name="interest" [(ngModel)]="form.interest">
+                <option value="">Selecciona una opción</option>
+                <option value="2dorms">Vivienda 2 dormitorios</option>
+                <option value="3dorms">Vivienda 3 dormitorios</option>
+                <option value="bloqueA">Bloque A</option>
+                <option value="bloqueB">Bloque B</option>
+                <option value="info">Información general</option>
+              </select>
+            </div>
+            <div class="field row2">
+              <label for="message">Mensaje (opcional)</label>
+              <textarea
+                id="message"
+                name="message"
+                [(ngModel)]="form.message"
+                rows="3"
+                placeholder="Cuéntanos qué necesitas saber..."></textarea>
+            </div>
+            <div class="submit-row">
+              <p class="consent">
+                Al enviar aceptas nuestra
+                <a href="#">política de privacidad</a>
+                y el tratamiento de tus datos para atender tu consulta.
+              </p>
+              <button type="submit" class="cta accent" [disabled]="!form.name || !form.email">
+                Enviar solicitud
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+                </svg>
+              </button>
+            </div>
+          </form>
+        } @else {
+          <div style="padding:48px 0;text-align:center;">
+            <div style="width:56px;height:56px;background:var(--avail-bg);border-radius:50%;display:grid;place-items:center;margin:0 auto 20px;">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#5B8C6F" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 6 9 17 4 12"/>
+              </svg>
+            </div>
+            <h3 style="font-family:var(--font-display);font-weight:400;font-size:28px;color:var(--paper);margin:0 0 12px;">
+              ¡Mensaje recibido!
+            </h3>
+            <p style="color:rgba(251,249,244,.7);max-width:40ch;margin:0 auto 28px;">
+              Nos pondremos en contacto contigo en menos de 24 horas. Gracias por tu interés en Skyline Residencial.
+            </p>
+            <button class="cta ghost" (click)="reset()" style="color:var(--paper);border-color:rgba(251,249,244,.4);">
+              Enviar otro mensaje
+            </button>
+          </div>
+        }
+      </div>
+
+      <!-- Contact info -->
+      <div class="contact-info">
+        <div style="margin-bottom:8px;">
+          <h3 style="font-family:var(--font-display);font-weight:400;font-size:28px;color:var(--paper);margin:0 0 8px;">
+            Oficina de ventas
+          </h3>
+          <p style="color:rgba(251,249,244,.6);font-size:14px;margin:0;">Atención personalizada sin cita previa</p>
+        </div>
+        <div class="row">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 22s-8-4.5-8-11.8A8 8 0 0 1 12 2a8 8 0 0 1 8 8.2c0 7.3-8 11.8-8 11.8z"/><circle cx="12" cy="10" r="3"/>
+          </svg>
+          <div>
+            <b>Dirección</b>
+            <p>Calle La Mazuela, 12<br>10600 Plasencia, Cáceres</p>
+          </div>
+        </div>
+        <div class="row">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.18 2 2 0 0 1 3.6 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 8.91a16 16 0 0 0 6.72 6.72l.83-.83a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/>
+          </svg>
+          <div>
+            <b>Teléfono</b>
+            <p>+34 927 000 000</p>
+          </div>
+        </div>
+        <div class="row">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/>
+          </svg>
+          <div>
+            <b>Email</b>
+            <p>info&#64;skylineresidencial.es</p>
+          </div>
+        </div>
+        <div class="row">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+          </svg>
+          <div>
+            <b>Horario</b>
+            <p>Lunes a Viernes: 9:00–18:00<br>Sábados: 10:00–14:00</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

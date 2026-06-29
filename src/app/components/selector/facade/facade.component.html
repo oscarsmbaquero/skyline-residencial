@@ -1,0 +1,136 @@
+<div class="facade-wrap">
+  <svg [attr.viewBox]="'0 0 ' + svgW + ' ' + svgH" class="facade-svg" role="img" [attr.aria-label]="'Fachada Bloque ' + block">
+    <!-- Sky gradient background -->
+    <defs>
+      <linearGradient id="skyGrad" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#C8D8E8"/>
+        <stop offset="100%" stop-color="#E8E2D2"/>
+      </linearGradient>
+      <linearGradient id="buildingGrad" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#3A5A70"/>
+        <stop offset="100%" stop-color="#2F4A5C"/>
+      </linearGradient>
+    </defs>
+
+    <!-- Sky -->
+    <rect x="0" y="0" [attr.width]="svgW" [attr.height]="svgH" fill="url(#skyGrad)"/>
+
+    <!-- Building body -->
+    <rect
+      [attr.x]="marginLeft - 10"
+      [attr.y]="marginTop - 10"
+      [attr.width]="svgW - marginLeft - marginRight + 20"
+      [attr.height]="svgH - marginTop - marginBottom + 10"
+      rx="6"
+      fill="url(#buildingGrad)"/>
+
+    <!-- Floor windows / flat cells -->
+    @for (cell of cells; track cell.id) {
+      <g
+        class="facade-cell"
+        [class.selected]="cell.id === selectedId"
+        (click)="onCellClick(cell.id)"
+        (mouseenter)="onCellMouseEnter(cell.flat.floor)"
+        role="button"
+        [attr.aria-label]="cell.flat.name + ' - ' + cell.flat.statusLabel"
+        tabindex="0"
+        (keydown.enter)="onCellClick(cell.id)">
+        <rect
+          class="flat-rect"
+          [attr.x]="cell.x"
+          [attr.y]="cell.y"
+          [attr.width]="cell.w"
+          [attr.height]="cell.h"
+          rx="4"
+          [attr.fill]="cell.fill"
+          [attr.stroke]="cell.id === selectedId ? '#0E1C25' : 'rgba(255,255,255,0.15)'"
+          [attr.stroke-width]="cell.id === selectedId ? 2.5 : 1"/>
+        <text
+          [attr.x]="cell.x + cell.w / 2"
+          [attr.y]="cell.y + cell.h / 2 - 6"
+          text-anchor="middle"
+          dominant-baseline="middle"
+          [attr.fill]="cell.textFill"
+          font-size="13"
+          font-weight="700"
+          font-family="sans-serif">{{ cell.flat.letter }}</text>
+        <text
+          [attr.x]="cell.x + cell.w / 2"
+          [attr.y]="cell.y + cell.h / 2 + 10"
+          text-anchor="middle"
+          dominant-baseline="middle"
+          [attr.fill]="cell.textFill"
+          font-size="9"
+          font-family="sans-serif"
+          opacity="0.8">{{ cell.flat.statusLabel }}</text>
+      </g>
+    }
+
+    <!-- Floor labels left -->
+    @for (floor of floorNumbers(); track floor) {
+      <text
+        [attr.x]="marginLeft - 16"
+        [attr.y]="getFloorY(floor)"
+        text-anchor="end"
+        dominant-baseline="middle"
+        fill="rgba(251,249,244,0.7)"
+        font-size="10"
+        font-family="sans-serif"
+        font-weight="600">{{ floorLabel(floor) }}</text>
+    }
+
+    <!-- Ground line -->
+    <rect
+      [attr.x]="marginLeft - 20"
+      [attr.y]="svgH - marginBottom + 10"
+      [attr.width]="svgW - marginLeft - marginRight + 40"
+      height="6"
+      rx="3"
+      fill="#8A7B6A"/>
+
+    <!-- Entrance -->
+    <rect
+      [attr.x]="svgW / 2 - 30"
+      [attr.y]="svgH - marginBottom - 16"
+      width="60"
+      height="26"
+      rx="4"
+      fill="#1F3543"/>
+    <text
+      [attr.x]="svgW / 2"
+      [attr.y]="svgH - marginBottom - 3"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      fill="rgba(251,249,244,0.6)"
+      font-size="8"
+      font-family="sans-serif"
+      letter-spacing="1">ENTRADA</text>
+
+    <!-- Trees -->
+    <ellipse [attr.cx]="marginLeft - 35" [attr.cy]="svgH - marginBottom - 10" rx="18" ry="24" fill="#5B8C6F" opacity="0.7"/>
+    <rect [attr.x]="marginLeft - 37" [attr.y]="svgH - marginBottom + 8" width="4" height="10" rx="2" fill="#6B5B47"/>
+    <ellipse [attr.cx]="svgW - marginRight + 35" [attr.cy]="svgH - marginBottom - 10" rx="18" ry="24" fill="#5B8C6F" opacity="0.7"/>
+    <rect [attr.x]="svgW - marginRight + 33" [attr.y]="svgH - marginBottom + 8" width="4" height="10" rx="2" fill="#6B5B47"/>
+
+    <!-- Block label -->
+    <text
+      [attr.x]="svgW / 2"
+      [attr.y]="svgH - 18"
+      text-anchor="middle"
+      fill="rgba(251,249,244,0.5)"
+      font-size="10"
+      font-family="sans-serif"
+      letter-spacing="3">BLOQUE {{ block }}</text>
+  </svg>
+</div>
+<div class="legend">
+  <span class="legend-item">
+    <span class="legend-sw" style="background:#D9E6DD"></span> Disponible
+  </span>
+  <span class="legend-item">
+    <span class="legend-sw" style="background:#EDE2CB"></span> Reservado
+  </span>
+  <span class="legend-item">
+    <span class="legend-sw" style="background:#E5D0CD"></span> Vendido
+  </span>
+</div>
