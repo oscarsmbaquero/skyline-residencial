@@ -192,6 +192,18 @@
 
               <!-- Acciones -->
               <div class="detail-actions">
+                @if (fichaAvailable) {
+                  <a
+                    [href]="fichaPdfUrl(selected)"
+                    [download]="fichaPdfFilename(selected)"
+                    class="cta ghost"
+                    style="flex:1;justify-content:center">
+                    Descargar ficha
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M12 3v12m0 0l-4-4m4 4l4-4M4 21h16"/>
+                    </svg>
+                  </a>
+                }
                 @if (selected.status === 0) {
                   <a routerLink="/contacto" class="cta accent" style="flex:1">
                     Reservar esta vivienda

@@ -1,5 +1,7 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
+import { catchError, of } from 'rxjs';
 import { Vivienda, Planta } from '../../models/vivienda.model';
 import { ViviendaDataService } from '../../services/vivienda-data.service';
 
@@ -20,6 +22,7 @@ export interface Grupo {
 export class ViviendaSelectorComponent implements OnInit {
 
   public svc = inject(ViviendaDataService);
+  private http = inject(HttpClient);
 
   readonly portales = this.svc.portales;
   readonly plantas = this.svc.plantas;
@@ -40,6 +43,7 @@ export class ViviendaSelectorComponent implements OnInit {
   activeDorms = 0;
 
   selectedFicha: string | null = null;
+  fichaAvailable = false;
 
   // ── SELECCIÓN ───────────────────────────
   get selected(): Vivienda | null {
@@ -50,6 +54,39 @@ export class ViviendaSelectorComponent implements OnInit {
 
   select(ficha: string) {
     this.selectedFicha = this.selectedFicha === ficha ? null : ficha;
+    this.fichaAvailable = false;
+
+    if (this.selected) {
+      this.checkFichaAvailability(this.selected);
+    }
+  }
+
+  private checkFichaAvailability(v: Vivienda) {
+    const ficha = v.ficha;
+
+    this.http.head(this.fichaPdfUrl(v), { observe: 'response' }).pipe(
+      catchError(() => of(null))
+    ).subscribe(res => {
+      // Evita aplicar el resultado si mientras tanto se seleccionó otra vivienda.
+      if (this.selectedFicha === ficha) {
+        // El servidor SSR devuelve 200 con el HTML de la app para cualquier
+        // ruta no encontrada, así que además del status hay que comprobar
+        // que la respuesta sea realmente un PDF.
+        const contentType = res?.headers.get('content-type') ?? '';
+        this.fichaAvailable = !!res && res.ok && contentType.includes('pdf');
+      }
+    });
+  }
+
+  fichaPdfFilename(v: Vivienda): string {
+    const plantaSeg = v.planta === 'Baja'
+      ? `BJO. ${v.posicion}`
+      : `${v.plantaIndex}º${v.posicion}`;
+    return `Bloque ${v.portal}_${plantaSeg}.pdf`;
+  }
+
+  fichaPdfUrl(v: Vivienda): string {
+    return `assets/fichas/${encodeURIComponent(this.fichaPdfFilename(v))}`;
   }
 
   setPortal(p: number) {
