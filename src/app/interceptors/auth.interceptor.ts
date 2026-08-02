@@ -12,8 +12,8 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const authService = inject(AuthService);
   const currentUser = authService['currentUserSubject']?.value;
 
-  // si no hay usuario, continuar
-  if (!currentUser) {
+  // si no hay usuario (o viene con forma inesperada), continuar
+  if (!currentUser?.data) {
     return next(req);
   }
 

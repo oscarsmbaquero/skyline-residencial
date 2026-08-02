@@ -1,4 +1,5 @@
-import { Injectable } from '@angular/core';
+import { Injectable, PLATFORM_ID, inject } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { BehaviorSubject, Observable, throwError } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
@@ -10,10 +11,14 @@ import { IUser, IUserResponse } from '../models/user-models';
   providedIn: 'root',
 })
 export class AuthService {
+  private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
+
   private currentUserSubject = new BehaviorSubject<IUserResponse | null>(null);
   currentUser$ = this.currentUserSubject.asObservable();
 
   constructor(private http: HttpClient) {
+    if (!this.isBrowser) return;
+
     const stored = localStorage.getItem('user');
     if (stored) {
       this.currentUserSubject.next(JSON.parse(stored));
@@ -35,7 +40,9 @@ export class AuthService {
           const userResponse: IUserResponse = { data: user };
 
           this.currentUserSubject.next(userResponse);
-          localStorage.setItem('user', JSON.stringify(userResponse));
+          if (this.isBrowser) {
+            localStorage.setItem('user', JSON.stringify(userResponse));
+          }
 
           return true;
         }),
@@ -52,7 +59,9 @@ export class AuthService {
 
   logout(): void {
     this.currentUserSubject.next(null);
-    localStorage.removeItem('user');
+    if (this.isBrowser) {
+      localStorage.removeItem('user');
+    }
   }
 
   isLogged(): boolean {
