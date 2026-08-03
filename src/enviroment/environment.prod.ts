@@ -1,4 +1,6 @@
 export const environment = {
     production: true,
-    apiUrl: 'https://62852cc03060bbd347460bff.mockapi.io/'
+     apiUrl: 'https://back-skyline-residencial.vercel.app/'
+
+    //apiUrl: 'http://localhost:5000/'
   };
